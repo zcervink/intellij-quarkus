@@ -9,7 +9,7 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class OtherUtils {
+public class HelperUtils {
 
     public static String listOfRemoteTextToString(List<RemoteText> data) {
         List<String> listOfStrings = data

@@ -11,7 +11,7 @@ public class BuildUtils {
     public static void testIfBuildIsSuccessful(RemoteRobot remoteRobot) {
         step("Test if the build is successful", () -> {
             final ToolWindowsPaneFixture toolWindowsPaneFixture = remoteRobot.find(ToolWindowsPaneFixture.class);
-            String theRunConsoleOutput = OtherUtils.listOfRemoteTextToString(toolWindowsPaneFixture.theRunConsole().findAllText());
+            String theRunConsoleOutput = HelperUtils.listOfRemoteTextToString(toolWindowsPaneFixture.theRunConsole().findAllText());
             assertTrue(theRunConsoleOutput.contains("BUILD SUCCESS"), "The build should be successful, but is not.");
         });
     }
@@ -66,7 +66,7 @@ public class BuildUtils {
 
     private static String getBuildStatusTreeText(RemoteRobot remoteRobot) {
         final ToolWindowsPaneFixture toolWindowsPaneFixture = remoteRobot.find(ToolWindowsPaneFixture.class);
-        String buildStatusTreeText = OtherUtils.listOfRemoteTextToString(toolWindowsPaneFixture.theBuildStatusTree().findAllText());
+        String buildStatusTreeText = HelperUtils.listOfRemoteTextToString(toolWindowsPaneFixture.theBuildStatusTree().findAllText());
         return buildStatusTreeText;
     }
 

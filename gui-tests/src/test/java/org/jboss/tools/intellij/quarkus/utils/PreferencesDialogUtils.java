@@ -55,7 +55,7 @@ public class PreferencesDialogUtils {
 
             // check/change the settings
             final PreferencesDialogFixture preferencesDialogFixture = remoteRobot.find(PreferencesDialogFixture.class, Duration.ofSeconds(10));
-            String comboBoxText = OtherUtils.listOfRemoteTextToString(preferencesDialogFixture.gradleJVMComboBox().findAllText());
+            String comboBoxText = HelperUtils.listOfRemoteTextToString(preferencesDialogFixture.gradleJVMComboBox().findAllText());
             preferencesDialogFixture.gradleJVMComboBox().click();
             //new Keyboard(remoteRobot).hotKey(49);
             //new Keyboard(remoteRobot).hotKey(49);

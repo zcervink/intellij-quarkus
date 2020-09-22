@@ -131,11 +131,11 @@ public class GlobalIdeUtils {
 
 
             final IdeFatalErrorsDialogFixture ideFatalErrorsDialogFixture = remoteRobot.find(IdeFatalErrorsDialogFixture.class, Duration.ofSeconds(10));
-            String exceptionNumberLabel = OtherUtils.listOfRemoteTextToString(ideFatalErrorsDialogFixture.numberOfExcetionsJBLabel().findAllText());
+            String exceptionNumberLabel = HelperUtils.listOfRemoteTextToString(ideFatalErrorsDialogFixture.numberOfExcetionsJBLabel().findAllText());
             int numberOfExceptions = Integer.parseInt(exceptionNumberLabel.substring(5));
 
             for (int i = 0; i < numberOfExceptions; i++) {
-                String exceptionStackTrace = OtherUtils.listOfRemoteTextToString(ideFatalErrorsDialogFixture.exceptionDescriptionJTextArea().findAllText());
+                String exceptionStackTrace = HelperUtils.listOfRemoteTextToString(ideFatalErrorsDialogFixture.exceptionDescriptionJTextArea().findAllText());
 
                 if (i + 1 < numberOfExceptions) {
                     ideFatalErrorsDialogFixture.nextExceptionButton().click();

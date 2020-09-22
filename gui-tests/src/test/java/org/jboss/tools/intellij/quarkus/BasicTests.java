@@ -80,14 +80,14 @@ public class BasicTests {
             newProjectDialogFixture.button("Configure...").click();
 
             DownloadingOptionsDialogFixture dodf = newProjectDialogFixture.find(DownloadingOptionsDialogFixture.class);
-            currentVersion = OtherUtils.listOfRemoteTextToString(dodf.nameField().findAllText());
+            currentVersion = HelperUtils.listOfRemoteTextToString(dodf.nameField().findAllText());
             dodf.button("Cancel").click();
             newProjectDialogFixture.button("Cancel").click();
 
             // get latest version from mvn repository
             String artifactGroup = "io.quarkus";
             String artifactName = "quarkus-core";
-            String latestVersion = OtherUtils.getLatestVersionFromMvnRepository(artifactGroup, artifactName);
+            String latestVersion = HelperUtils.getLatestVersionFromMvnRepository(artifactGroup, artifactName);
 
             assertTrue(currentVersion.equals(latestVersion), "Newest version (" + latestVersion + ") of the quarkus runtime is available. You have the "
                     + currentVersion + " version.");
