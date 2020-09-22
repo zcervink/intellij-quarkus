@@ -6,7 +6,7 @@ import org.jboss.tools.intellij.quarkus.fixtures.dialogs.NewProjectDialogFixture
 import org.jboss.tools.intellij.quarkus.fixtures.dialogs.WelcomeFrameDialogFixture;
 import org.jboss.tools.intellij.quarkus.fixtures.quarkus.DownloadingOptionsDialogFixture;
 import org.jboss.tools.intellij.quarkus.utils.*;
-import org.jboss.tools.intellij.quarkus.utils.quarkus.Utils;
+import org.jboss.tools.intellij.quarkus.utils.QuarkusUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ public class BasicTests {
     @Test
     public void createAQuarkusProjectAndBuildItUsingMaven() {
         step("Create a Quarkus project and build it using maven", () -> {
-            Utils.createNewQuarkusProject(robot, BuildUtils.ToolToBuildTheProject.MAVEN);
+            QuarkusUtils.createNewQuarkusProject(robot, BuildUtils.ToolToBuildTheProject.MAVEN);
             GlobalIdeUtils.waitUntilTheProjectImportIsComplete(robot);
             GlobalIdeUtils.closeTheTipOfTheDayDialog(robot);
             GlobalIdeUtils.maximizeTheIdeWindow(robot);
@@ -99,7 +99,7 @@ public class BasicTests {
         step("Test if the Quarkus runtime is downloaded", () -> {
             // create new Java Quarkus project, select to download the runtime
             String projectName = "java-project-with-quarkus-runtime";
-            String runtimeJarName = Utils.createNewJavaProjectWithQuarkus(robot, projectName);
+            String runtimeJarName = QuarkusUtils.createNewJavaProjectWithQuarkus(robot, projectName);
 
             GlobalIdeUtils.waitUntilTheProjectImportIsComplete(robot);
             GlobalIdeUtils.closeTheTipOfTheDayDialog(robot);
@@ -116,7 +116,7 @@ public class BasicTests {
     //@Test
     public void createAQuarkusProjectAndBuildItUsingGradle() {
         step("Create a Quarkus project and build it using gradle", () -> {
-            Utils.createNewQuarkusProject(robot, BuildUtils.ToolToBuildTheProject.GRADLE);
+            QuarkusUtils.createNewQuarkusProject(robot, BuildUtils.ToolToBuildTheProject.GRADLE);
             GlobalIdeUtils.waitUntilTheProjectImportIsComplete(robot);
             GlobalIdeUtils.closeTheTipOfTheDayDialog(robot);
             GlobalIdeUtils.waitUntilAllTheBgTasksFinish(robot);

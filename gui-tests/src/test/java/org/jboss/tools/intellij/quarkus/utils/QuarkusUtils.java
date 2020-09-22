@@ -1,4 +1,4 @@
-package org.jboss.tools.intellij.quarkus.utils.quarkus;
+package org.jboss.tools.intellij.quarkus.utils;
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.fixtures.JRadioButtonFixture;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 
-public class Utils {
+public class QuarkusUtils {
 
     public static void createNewQuarkusProject(RemoteRobot remoteRobot, BuildUtils.ToolToBuildTheProject toolToBuildTheProject) {
         step("Create New Quarkus Project", () -> {
