@@ -59,18 +59,6 @@ public class GlobalUtils {
 
     public static String projectPath = "";
 
-    public static RemoteRobot getRemoteRobotConnection(int port) throws InterruptedException {
-        RemoteRobot remoteRobot = new RemoteRobot("http://127.0.0.1:" + port);
-        for (int i = 0; i < 60; i++) {
-            try {
-                remoteRobot.find(WelcomeFrameDialogFixture.class);
-            } catch (Exception ex) {
-                Thread.sleep(1000);
-            }
-        }
-        return remoteRobot;
-    }
-
     public static void closeTheTipOfTheDayDialogIfItAppears(RemoteRobot remoteRobot) {
         step("Close the 'Tip of the Day' Dialog", () -> {
             try {
@@ -155,32 +143,6 @@ public class GlobalUtils {
         });
     }
 
-    public static void clearTheWorkspace(RemoteRobot remoteRobot) {
-        step("Delete all the projects in the workspace", () -> {
-            // delete all the projects' links from the 'Welcome to IntelliJ IDEA' dialog
-            int numberOfLinks = getNumberOfProjectLinks(remoteRobot);
-            for (int i = 0; i < numberOfLinks; i++) {
-                final WelcomeFrameDialogFixture welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialogFixture.class, Duration.ofSeconds(10));
-                ComponentFixture cf = welcomeFrameDialogFixture.find(ComponentFixture.class, byXpath("//div[@accessiblename='Recent Projects' and @class='MyList']"));
-                cf.runJs("const horizontal_offset = component.getWidth()-22;\n" +
-                        "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
-            }
-
-            // delete all the files and folders in the IdeaProjects folder
-            try {
-                String pathToDirToMakeEmpty = System.getProperty("user.home") + File.separator + "IdeaProjects";
-                boolean doesTheProjectDirExists = Files.exists(Paths.get(pathToDirToMakeEmpty));
-                if (doesTheProjectDirExists) {
-                    FileUtils.cleanDirectory(new File(pathToDirToMakeEmpty));
-                } else {
-                    Files.createDirectory(Paths.get(pathToDirToMakeEmpty));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
     public static void quitIntelliJFromTheWelcomeDialog(RemoteRobot remoteRobot) {
         step("Quit IntelliJ Idea from the 'Welcome To IntelliJ IDEA' dialog", () -> {
             WelcomeFrameDialogFixture welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialogFixture.class);
@@ -213,12 +175,6 @@ public class GlobalUtils {
             }
         }
         return ideaVersion;
-    }
-
-    public enum IdeaVersion {
-        V2020_1,
-        V2020_2,
-        UNIDENTIFIED
     }
 
     public static void takeScreenshot() {
@@ -280,38 +236,6 @@ public class GlobalUtils {
         return true;
     }
 
-    private static int getNumberOfProjectLinks(RemoteRobot remoteRobot) {
-        final WelcomeFrameDialogFixture welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialogFixture.class, Duration.ofSeconds(10));
-        try {
-            ComponentFixture cf = welcomeFrameDialogFixture.find(ComponentFixture.class, byXpath("//div[@accessiblename='Recent Projects' and @class='MyList']"));
-            int numberOfProjectsLinks = cf.findAllText().size() / 2;    // 2 items per 1 project link (project path and project name)
-            return numberOfProjectsLinks;
-        } catch (WaitForConditionTimeoutException e) {
-            // the list with accessible name 'Recent Projects' is not available -> 0 links in the 'Welcome to IntelliJ IDEA' dialog
-            return 0;
-        }
-    }
-
-    public static void waitUntilIntelliJStarts(int port) {
-        waitFor(Duration.ofSeconds(600), Duration.ofSeconds(3), "The IntelliJ Idea did not start in 10 minutes.", () -> isIntelliJUIVisible(port));
-    }
-
-    private static boolean isIntelliJUIVisible(int port) {
-        return isHostOnIpAndPortAccessible("127.0.0.1", port);
-    }
-
-    private static boolean isHostOnIpAndPortAccessible(String ip, int port) {
-        SocketAddress sockaddr = new InetSocketAddress(ip, port);
-        Socket socket = new Socket();
-
-        try {
-            socket.connect(sockaddr, 10000);
-        } catch (IOException IOException) {
-            return false;
-        }
-        return true;
-    }
-
     public static void invokeCmdUsingTheSearchEverywherePopup(RemoteRobot remoteRobot, String cmdToInvoke) {
         step("Invoke a command using the Search Everywhere popup", () -> {
             Keyboard keyboard = new Keyboard(remoteRobot);
@@ -333,5 +257,11 @@ public class GlobalUtils {
         final SearchEverywherePopupFixture searchEverywherePopupFixture = remoteRobot.find(SearchEverywherePopupFixture.class, Duration.ofSeconds(10));
         String searchResultsString = listOfRemoteTextToString(searchEverywherePopupFixture.searchResultsJBList().findAllText());
         return searchResultsString.toLowerCase().contains(cmdToInvoke.toLowerCase());
+    }
+
+    public enum IdeaVersion {
+        V2020_1,
+        V2020_2,
+        UNIDENTIFIED
     }
 }

@@ -11,15 +11,18 @@
 package org.jboss.tools.intellij.quarkus;
 
 import com.intellij.remoterobot.RemoteRobot;
+import org.jboss.tools.intellij.commonUiTestLibrary.IntegrationTestsUtils;
 import org.jboss.tools.intellij.quarkus.utils.BuildUtils;
 import org.jboss.tools.intellij.quarkus.utils.GlobalUtils;
 import org.jboss.tools.intellij.quarkus.utils.ProjectToolWindowUtils;
 import org.jboss.tools.intellij.quarkus.utils.QuarkusUtils;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
+import static org.jboss.tools.intellij.commonUiTestLibrary.utils.GlobalUtils.clearTheWorkspace;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -28,22 +31,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author zcervink@redhat.com
  */
 public class BasicTests {
-
     private static RemoteRobot robot;
-    private static GlobalUtils.IdeaVersion ideaVersion;
 
     @BeforeAll
-    public static void connect() throws InterruptedException {
-        GlobalUtils.waitUntilIntelliJStarts(8082);
-        robot = GlobalUtils.getRemoteRobotConnection(8082);
-        GlobalUtils.clearTheWorkspace(robot);
-        ideaVersion = GlobalUtils.getTheIntelliJVersion(robot);
+    public static void runIdeForUiTests() {
+        robot = IntegrationTestsUtils.runIde();
+    }
+
+    @AfterAll
+    public static void closeIde() {
+        IntegrationTestsUtils.closeIde();
     }
 
     @AfterEach
     public void finishTheTestRun() {
         GlobalUtils.checkForExceptions(robot);
-        GlobalUtils.clearTheWorkspace(robot);
+        clearTheWorkspace(robot);
     }
 
     @Test
