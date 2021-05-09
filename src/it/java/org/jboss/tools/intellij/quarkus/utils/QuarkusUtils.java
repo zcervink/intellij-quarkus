@@ -18,7 +18,7 @@ import com.intellij.remoterobot.fixtures.JTextFieldFixture;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.Keyboard;
 import org.jboss.tools.intellij.quarkus.fixtures.dialogs.NewProjectDialogFixture;
-import org.jboss.tools.intellij.quarkus.fixtures.dialogs.WelcomeFrameDialogFixture;
+import org.jboss.tools.intellij.commonUiTestLibrary.fixtures.dialogs.WelcomeFrameDialogFixture;
 import org.jboss.tools.intellij.quarkus.fixtures.quarkus.DownloadingOptionsDialogFixture;
 
 import java.awt.Point;
