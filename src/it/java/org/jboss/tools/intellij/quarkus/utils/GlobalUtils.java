@@ -18,7 +18,7 @@ import com.intellij.remoterobot.utils.Keyboard;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import org.jboss.tools.intellij.quarkus.fixtures.dialogs.IdeFatalErrorsDialogFixture;
 import org.jboss.tools.intellij.quarkus.fixtures.dialogs.TipOfTheDayDialogFixture;
-import org.jboss.tools.intellij.commonUiTestLibrary.fixtures.dialogs.WelcomeFrameDialogFixture;
+import org.jboss.tools.intellij.commonUiTestLibrary.fixtures.dialogs.WelcomeFrameDialog;
 import org.jboss.tools.intellij.quarkus.fixtures.mainIdeWindow.CustomHeaderMenuBarFixture;
 import org.jboss.tools.intellij.quarkus.fixtures.mainIdeWindow.IdeStatusBarFixture;
 import org.jboss.tools.intellij.quarkus.fixtures.mainIdeWindow.LinuxIdeMenuBarFixture;
@@ -89,7 +89,7 @@ public class GlobalUtils {
     public static void checkForExceptions(RemoteRobot remoteRobot) {
         step("Check for exceptions and other errors", () -> {
             try {
-                final WelcomeFrameDialogFixture welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialogFixture.class, Duration.ofSeconds(10));
+                final WelcomeFrameDialog welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialog.class, Duration.ofSeconds(10));
                 welcomeFrameDialogFixture.ideErrorsIcon().click();
             } catch (WaitForConditionTimeoutException e) {
                 e.printStackTrace();
@@ -133,7 +133,7 @@ public class GlobalUtils {
                 closeProjectButtonFixture.click();
             }
 
-            final WelcomeFrameDialogFixture welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialogFixture.class, Duration.ofSeconds(10));
+            final WelcomeFrameDialog welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialog.class, Duration.ofSeconds(10));
             welcomeFrameDialogFixture.runJs("const horizontal_offset = component.getWidth()/2;\n" +
                     "robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 1);");
         });
@@ -141,7 +141,7 @@ public class GlobalUtils {
 
     public static void quitIntelliJFromTheWelcomeDialog(RemoteRobot remoteRobot) {
         step("Quit IntelliJ Idea from the 'Welcome To IntelliJ IDEA' dialog", () -> {
-            WelcomeFrameDialogFixture welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialogFixture.class);
+            WelcomeFrameDialog welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialog.class);
             if (remoteRobot.isMac()) {
                 welcomeFrameDialogFixture.runJs("robot.click(component, new Point(15, 10), MouseButton.LEFT_BUTTON, 1);");
             } else if (remoteRobot.isWin()) {
@@ -155,7 +155,7 @@ public class GlobalUtils {
     }
 
     public static IdeaVersion getTheIntelliJVersion(RemoteRobot remoteRobot) {
-        WelcomeFrameDialogFixture welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialogFixture.class);
+        WelcomeFrameDialog welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialog.class);
         List<ComponentFixture> jLabels = welcomeFrameDialogFixture.findAll(ComponentFixture.class, byXpath("//div[@class='JLabel']"));
 
         IdeaVersion ideaVersion = IdeaVersion.UNIDENTIFIED;

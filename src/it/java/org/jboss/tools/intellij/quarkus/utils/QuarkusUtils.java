@@ -18,7 +18,7 @@ import com.intellij.remoterobot.fixtures.JTextFieldFixture;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.Keyboard;
 import org.jboss.tools.intellij.quarkus.fixtures.dialogs.NewProjectDialogFixture;
-import org.jboss.tools.intellij.commonUiTestLibrary.fixtures.dialogs.WelcomeFrameDialogFixture;
+import org.jboss.tools.intellij.commonUiTestLibrary.fixtures.dialogs.WelcomeFrameDialog;
 import org.jboss.tools.intellij.quarkus.fixtures.quarkus.DownloadingOptionsDialogFixture;
 
 import java.awt.Point;
@@ -42,7 +42,7 @@ public class QuarkusUtils {
 
     public static void createNewQuarkusProject(RemoteRobot remoteRobot, BuildUtils.ToolToBuildTheProject toolToBuildTheProject, EndpointURLType endpointURLType) {
         step("Create new Quarkus project", () -> {
-            final WelcomeFrameDialogFixture welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialogFixture.class);
+            final WelcomeFrameDialog welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialog.class);
             welcomeFrameDialogFixture.createNewProjectLink().click();
             final NewProjectDialogFixture newProjectDialogFixture = welcomeFrameDialogFixture.find(NewProjectDialogFixture.class, Duration.ofSeconds(20));
             NewProjectDialogUtils.selectNewProjectType(remoteRobot, "Quarkus");
@@ -80,7 +80,7 @@ public class QuarkusUtils {
 
     public static void tryToCreateNewQuarkusProjectWithInvalidCustomEndpointURL(RemoteRobot remoteRobot) {
         step("Try to create new Quarkus project with invalid custom endpoint URL", () -> {
-            final WelcomeFrameDialogFixture welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialogFixture.class);
+            final WelcomeFrameDialog welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialog.class);
             welcomeFrameDialogFixture.createNewProjectLink().click();
             final NewProjectDialogFixture newProjectDialogFixture = welcomeFrameDialogFixture.find(NewProjectDialogFixture.class, Duration.ofSeconds(20));
             NewProjectDialogUtils.selectNewProjectType(remoteRobot, "Quarkus");
@@ -134,7 +134,7 @@ public class QuarkusUtils {
     }
 
     public static String createNewJavaProjectWithQuarkusFramework(RemoteRobot remoteRobot, String projectName) {
-        final WelcomeFrameDialogFixture welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialogFixture.class);
+        final WelcomeFrameDialog welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialog.class);
         welcomeFrameDialogFixture.createNewProjectLink().click();
         final NewProjectDialogFixture newProjectDialogFixture = welcomeFrameDialogFixture.find(NewProjectDialogFixture.class, Duration.ofSeconds(20));
         NewProjectDialogUtils.selectNewProjectType(remoteRobot, "Java");
