@@ -27,8 +27,8 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
  */
 @DefaultXpath(by = "SearchEverywhereUI type", xpath = "//div[@accessiblename='Search everywhere' and @class='SearchEverywhereUI']")
 @FixtureName(name = "Search Everywhere Popup")
-public class SearchEverywherePopupFixture extends CommonContainerFixture {
-    public SearchEverywherePopupFixture(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
+public class SearchEverywherePopup extends CommonContainerFixture {
+    public SearchEverywherePopup(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
     }
 

@@ -29,8 +29,8 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
  */
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@accessiblename='IDE Fatal Errors' and @class='MyDialog']")
 @FixtureName(name = "IDE Fatal Errors Dialog")
-public class IdeFatalErrorsDialogFixture extends CommonContainerFixture {
-    public IdeFatalErrorsDialogFixture(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
+public class IdeFatalErrorsDialog extends CommonContainerFixture {
+    public IdeFatalErrorsDialog(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
     }
 

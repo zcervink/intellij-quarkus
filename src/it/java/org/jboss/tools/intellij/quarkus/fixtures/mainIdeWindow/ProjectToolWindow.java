@@ -8,7 +8,7 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.jboss.tools.intellij.quarkus.fixtures.quarkus;
+package org.jboss.tools.intellij.quarkus.fixtures.mainIdeWindow;
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
@@ -18,23 +18,21 @@ import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 
 /**
- * Downloading Options dialog fixture
+ * The Project Tool Window Fixture
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "MyDialog type", xpath = "//div[@accessiblename='Downloading Options' and @class='MyDialog']")
-@FixtureName(name = "Dialog")
-public class DownloadingOptionsDialogFixture extends CommonContainerFixture {
-    public DownloadingOptionsDialogFixture(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
+@DefaultXpath(by = "InternalDecorator type", xpath = "//div[@accessiblename='Project Tool Window' and @class='InternalDecorator']")
+@FixtureName(name = "Project Tool Window")
+public class ProjectToolWindow extends CommonContainerFixture {
+    public ProjectToolWindow(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
     }
 
-    public ComponentFixture filesToDownload() {
-        return find(ComponentFixture.class, byXpath("//div[@accessiblename='Files to download:' and @class='CheckBoxList']"));
+    public ComponentFixture projectViewTree() {
+        return find(ComponentFixture.class, byXpath("//div[@class='ProjectViewTree']"));
     }
 }

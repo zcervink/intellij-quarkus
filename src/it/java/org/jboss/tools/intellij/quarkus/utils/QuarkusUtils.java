@@ -17,9 +17,9 @@ import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.JTextFieldFixture;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.Keyboard;
-import org.jboss.tools.intellij.quarkus.fixtures.dialogs.NewProjectDialogFixture;
+import org.jboss.tools.intellij.quarkus.fixtures.dialogs.NewProjectDialog;
 import org.jboss.tools.intellij.commonUiTestLibrary.fixtures.dialogs.WelcomeFrameDialog;
-import org.jboss.tools.intellij.quarkus.fixtures.quarkus.DownloadingOptionsDialogFixture;
+import org.jboss.tools.intellij.quarkus.fixtures.quarkus.DownloadingOptionsDialog;
 
 import java.awt.Point;
 import java.time.Duration;
@@ -44,7 +44,7 @@ public class QuarkusUtils {
         step("Create new Quarkus project", () -> {
             final WelcomeFrameDialog welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialog.class);
             welcomeFrameDialogFixture.createNewProjectLink().click();
-            final NewProjectDialogFixture newProjectDialogFixture = welcomeFrameDialogFixture.find(NewProjectDialogFixture.class, Duration.ofSeconds(20));
+            final NewProjectDialog newProjectDialogFixture = welcomeFrameDialogFixture.find(NewProjectDialog.class, Duration.ofSeconds(20));
             NewProjectDialogUtils.selectNewProjectType(remoteRobot, "Quarkus");
 
             if (endpointURLType == EndpointURLType.CUSTOM) {
@@ -82,7 +82,7 @@ public class QuarkusUtils {
         step("Try to create new Quarkus project with invalid custom endpoint URL", () -> {
             final WelcomeFrameDialog welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialog.class);
             welcomeFrameDialogFixture.createNewProjectLink().click();
-            final NewProjectDialogFixture newProjectDialogFixture = welcomeFrameDialogFixture.find(NewProjectDialogFixture.class, Duration.ofSeconds(20));
+            final NewProjectDialog newProjectDialogFixture = welcomeFrameDialogFixture.find(NewProjectDialog.class, Duration.ofSeconds(20));
             NewProjectDialogUtils.selectNewProjectType(remoteRobot, "Quarkus");
 
             ComponentFixture customEndpointURLJBRadioButton = remoteRobot.find(ComponentFixture.class, byXpath("//div[@accessiblename='Custom:' and @class='JBRadioButton' and @text='Custom:']"));
@@ -117,7 +117,7 @@ public class QuarkusUtils {
         });
     }
 
-    public static void selectQuarkusExtensions(NewProjectDialogFixture newProjectDialogFixture, int categoryIndex, int[] extensionsIndexes) {
+    public static void selectQuarkusExtensions(NewProjectDialog newProjectDialogFixture, int categoryIndex, int[] extensionsIndexes) {
         step("Select Quarkus extensions", () -> {
             List<String> extensionCategoriesRenderedText = newProjectDialogFixture.extensionCategoriesJBList().findAllText()
                     .stream()
@@ -136,7 +136,7 @@ public class QuarkusUtils {
     public static String createNewJavaProjectWithQuarkusFramework(RemoteRobot remoteRobot, String projectName) {
         final WelcomeFrameDialog welcomeFrameDialogFixture = remoteRobot.find(WelcomeFrameDialog.class);
         welcomeFrameDialogFixture.createNewProjectLink().click();
-        final NewProjectDialogFixture newProjectDialogFixture = welcomeFrameDialogFixture.find(NewProjectDialogFixture.class, Duration.ofSeconds(20));
+        final NewProjectDialog newProjectDialogFixture = welcomeFrameDialogFixture.find(NewProjectDialog.class, Duration.ofSeconds(20));
         NewProjectDialogUtils.selectNewProjectType(remoteRobot, "Java");
 
         newProjectDialogFixture.theFrameworksTree().findText("Quarkus").click();
@@ -148,7 +148,7 @@ public class QuarkusUtils {
         theDownloadRadioButton.click();
         newProjectDialogFixture.button("Configure...").click();
 
-        DownloadingOptionsDialogFixture dodf = newProjectDialogFixture.find(DownloadingOptionsDialogFixture.class);
+        DownloadingOptionsDialog dodf = newProjectDialogFixture.find(DownloadingOptionsDialog.class);
         String runtimeJarName = dodf.filesToDownload().findAllText().get(0).getText();
         dodf.button("Cancel").click();
         newProjectDialogFixture.button("Next").click();

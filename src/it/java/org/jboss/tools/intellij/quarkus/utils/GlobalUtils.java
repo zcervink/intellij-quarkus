@@ -16,13 +16,13 @@ import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.Keyboard;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
-import org.jboss.tools.intellij.quarkus.fixtures.dialogs.IdeFatalErrorsDialogFixture;
-import org.jboss.tools.intellij.quarkus.fixtures.dialogs.TipOfTheDayDialogFixture;
+import org.jboss.tools.intellij.quarkus.fixtures.dialogs.IdeFatalErrorsDialog;
+import org.jboss.tools.intellij.quarkus.fixtures.dialogs.TipOfTheDayDialog;
 import org.jboss.tools.intellij.commonUiTestLibrary.fixtures.dialogs.WelcomeFrameDialog;
-import org.jboss.tools.intellij.quarkus.fixtures.mainIdeWindow.CustomHeaderMenuBarFixture;
-import org.jboss.tools.intellij.quarkus.fixtures.mainIdeWindow.IdeStatusBarFixture;
-import org.jboss.tools.intellij.quarkus.fixtures.mainIdeWindow.LinuxIdeMenuBarFixture;
-import org.jboss.tools.intellij.quarkus.fixtures.popups.SearchEverywherePopupFixture;
+import org.jboss.tools.intellij.quarkus.fixtures.mainIdeWindow.CustomHeaderMenuBar;
+import org.jboss.tools.intellij.quarkus.fixtures.mainIdeWindow.IdeStatusBar;
+import org.jboss.tools.intellij.quarkus.fixtures.mainIdeWindow.LinuxIdeMenuBar;
+import org.jboss.tools.intellij.quarkus.fixtures.popups.SearchEverywherePopup;
 
 import javax.imageio.ImageIO;
 import java.awt.AWTException;
@@ -58,7 +58,7 @@ public class GlobalUtils {
     public static void closeTheTipOfTheDayDialogIfItAppears(RemoteRobot remoteRobot) {
         step("Close the 'Tip of the Day' Dialog", () -> {
             try {
-                final TipOfTheDayDialogFixture tipOfTheDayDialogFixture = remoteRobot.find(TipOfTheDayDialogFixture.class, Duration.ofSeconds(20));
+                final TipOfTheDayDialog tipOfTheDayDialogFixture = remoteRobot.find(TipOfTheDayDialog.class, Duration.ofSeconds(20));
                 tipOfTheDayDialogFixture.button("Close").click();
             } catch (WaitForConditionTimeoutException e) {
                 e.printStackTrace();
@@ -96,7 +96,7 @@ public class GlobalUtils {
                 return;
             }
 
-            final IdeFatalErrorsDialogFixture ideFatalErrorsDialogFixture = remoteRobot.find(IdeFatalErrorsDialogFixture.class, Duration.ofSeconds(10));
+            final IdeFatalErrorsDialog ideFatalErrorsDialogFixture = remoteRobot.find(IdeFatalErrorsDialog.class, Duration.ofSeconds(10));
             String exceptionNumberLabel = ideFatalErrorsDialogFixture.numberOfExcetionsJBLabel().findAllText().get(0).getText();
             int numberOfExceptions = Integer.parseInt(exceptionNumberLabel.substring(5));
 
@@ -118,14 +118,14 @@ public class GlobalUtils {
             if (remoteRobot.isMac()) {
                 cf.runJs("robot.click(component, new Point(15, 10), MouseButton.LEFT_BUTTON, 1);");
             } else if (remoteRobot.isWin()) {
-                CustomHeaderMenuBarFixture chmb = remoteRobot.find(CustomHeaderMenuBarFixture.class, Duration.ofSeconds(10));
+                CustomHeaderMenuBar chmb = remoteRobot.find(CustomHeaderMenuBar.class, Duration.ofSeconds(10));
                 chmb.mainMenuItem("File").click();
                 List<ContainerFixture> allHeavyWeightWindows = remoteRobot.findAll(ContainerFixture.class, byXpath("//div[@class='HeavyWeightWindow']"));
                 ContainerFixture lastHeavyWeightWindow = allHeavyWeightWindows.get(allHeavyWeightWindows.size() - 1);
                 ComponentFixture closeProjectButtonFixture = lastHeavyWeightWindow.find(ComponentFixture.class, byXpath("//div[@accessiblename='Close Project' and @text='Close Project']"));
                 closeProjectButtonFixture.click();
             } else {
-                LinuxIdeMenuBarFixture limb = remoteRobot.find(LinuxIdeMenuBarFixture.class, Duration.ofSeconds(10));
+                LinuxIdeMenuBar limb = remoteRobot.find(LinuxIdeMenuBar.class, Duration.ofSeconds(10));
                 limb.mainMenuItem("File").click();
                 List<ContainerFixture> allHeavyWeightWindows = remoteRobot.findAll(ContainerFixture.class, byXpath("//div[@class='HeavyWeightWindow']"));
                 ContainerFixture lastHeavyWeightWindow = allHeavyWeightWindows.get(allHeavyWeightWindows.size() - 1);
@@ -217,7 +217,7 @@ public class GlobalUtils {
 
     private static boolean didAllTheBgTasksFinish(RemoteRobot remoteRobot) {
         for (int i = 0; i < 5; i++) {
-            final IdeStatusBarFixture ideStatusBarFixture = remoteRobot.find(IdeStatusBarFixture.class);
+            final IdeStatusBar ideStatusBarFixture = remoteRobot.find(IdeStatusBar.class);
             List<RemoteText> inlineProgressPanelContent = ideStatusBarFixture.inlineProgressPanel().findAllText();
             if (!inlineProgressPanelContent.isEmpty()) {
                 return false;
@@ -240,7 +240,7 @@ public class GlobalUtils {
             } else {
                 keyboard.hotKey(KeyEvent.VK_CONTROL, KeyEvent.VK_N);
             }
-            final SearchEverywherePopupFixture searchEverywherePopupFixture = remoteRobot.find(SearchEverywherePopupFixture.class, Duration.ofSeconds(10));
+            final SearchEverywherePopup searchEverywherePopupFixture = remoteRobot.find(SearchEverywherePopup.class, Duration.ofSeconds(10));
             searchEverywherePopupFixture.popupTab("All").click();
             searchEverywherePopupFixture.searchField().click();
             keyboard.enterText(cmdToInvoke);
@@ -250,7 +250,7 @@ public class GlobalUtils {
     }
 
     private static boolean didTheSearchInTheSearchEverywherePopupFinish(RemoteRobot remoteRobot, String cmdToInvoke) {
-        final SearchEverywherePopupFixture searchEverywherePopupFixture = remoteRobot.find(SearchEverywherePopupFixture.class, Duration.ofSeconds(10));
+        final SearchEverywherePopup searchEverywherePopupFixture = remoteRobot.find(SearchEverywherePopup.class, Duration.ofSeconds(10));
         String searchResultsString = listOfRemoteTextToString(searchEverywherePopupFixture.searchResultsJBList().findAllText());
         return searchResultsString.toLowerCase().contains(cmdToInvoke.toLowerCase());
     }
