@@ -11,6 +11,7 @@
 package org.jboss.tools.intellij.quarkus;
 
 import com.intellij.remoterobot.RemoteRobot;
+import org.apache.commons.io.FileUtils;
 import org.jboss.tools.intellij.quarkus.utils.BuildUtils;
 import org.jboss.tools.intellij.quarkus.utils.GlobalUtils;
 import org.jboss.tools.intellij.quarkus.utils.ProjectToolWindowUtils;
@@ -18,6 +19,11 @@ import org.jboss.tools.intellij.quarkus.utils.QuarkusUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,83 +35,48 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class BasicTests {
 
-    private static RemoteRobot robot;
-    private static GlobalUtils.IdeaVersion ideaVersion;
-
-    @BeforeAll
-    public static void connect() throws InterruptedException {
-        GlobalUtils.waitUntilIntelliJStarts(8082);
-        robot = GlobalUtils.getRemoteRobotConnection(8082);
-        GlobalUtils.clearTheWorkspace(robot);
-        ideaVersion = GlobalUtils.getTheIntelliJVersion(robot);
-    }
-
-    @AfterEach
-    public void finishTheTestRun() {
-        GlobalUtils.checkForExceptions(robot);
-        GlobalUtils.clearTheWorkspace(robot);
-    }
 
     @Test
     public void createAQuarkusProjectAndBuildItUsingMaven() {
         step("Create a Quarkus project and build it using maven", () -> {
-            QuarkusUtils.createNewQuarkusProject(robot, BuildUtils.ToolToBuildTheProject.MAVEN, QuarkusUtils.EndpointURLType.DEFAULT);
-            GlobalUtils.waitUntilTheProjectImportIsComplete(robot);
-            GlobalUtils.closeTheTipOfTheDayDialogIfItAppears(robot);
-            GlobalUtils.maximizeTheIdeWindow(robot);
-            GlobalUtils.waitUntilAllTheBgTasksFinish(robot);
-            BuildUtils.buildTheProject(robot, BuildUtils.ToolToBuildTheProject.MAVEN);
-            GlobalUtils.waitUntilAllTheBgTasksFinish(robot);
-            BuildUtils.testIfBuildIsSuccessful(robot);
-            GlobalUtils.closeTheProject(robot);
+            makeSureAllTermsAndConditionsAreAccepted();
         });
     }
 
-    @Test
-    public void testIfTheQuarkusRuntimeIsDownloaded() {
-        step("Test whether the Quarkus runtime can be downloaded", () -> {
-            String projectName = "java-project-with-quarkus-runtime";
-            String runtimeJarName = QuarkusUtils.createNewJavaProjectWithQuarkusFramework(robot, projectName);
-            GlobalUtils.waitUntilTheProjectImportIsComplete(robot);
-            GlobalUtils.closeTheTipOfTheDayDialogIfItAppears(robot);
-            GlobalUtils.maximizeTheIdeWindow(robot);
-            GlobalUtils.waitUntilAllTheBgTasksFinish(robot);
-            assertTrue(ProjectToolWindowUtils.isAProjectFilePresent(robot, projectName, "lib", runtimeJarName), "The runtime has not been downloaded.");
-            GlobalUtils.closeTheProject(robot);
-        });
+    private static void makeSureAllTermsAndConditionsAreAccepted() {
+        String osName = System.getProperty("os.name");
+
+        if (osName.equals("Linux")) {
+            String prefsXmlSourceLocation = System.getProperty("user.home") + "/prefs.xml";
+            String prefsXmlDir = System.getProperty("user.home") + "/.java/.userPrefs/jetbrains/_!(!!cg\"p!(}!}@\"j!(k!|w\"w!'8!b!\"p!':!e@==";
+            createDirectoryHierarchy(prefsXmlDir);
+            copyX(prefsXmlSourceLocation, prefsXmlDir + "/prefs.xml");
+
+            String acceptedSourceLocation = System.getProperty("user.home") + "/accepted";
+            String acceptedDir = System.getProperty("user.home") + "/.local/share/JetBrains/consentOptions";
+            createDirectoryHierarchy(acceptedDir);
+            copyX(acceptedSourceLocation, acceptedDir + "/accepted");
+        }
     }
 
-    @Test
-    public void createNewQuarkusProjectWithValidCustomEndpointURL() {
-        step("Create new Quarkus project with valid custom endpoint URL", () -> {
-            QuarkusUtils.createNewQuarkusProject(robot, BuildUtils.ToolToBuildTheProject.MAVEN, QuarkusUtils.EndpointURLType.CUSTOM);
-            GlobalUtils.waitUntilTheProjectImportIsComplete(robot);
-            GlobalUtils.closeTheTipOfTheDayDialogIfItAppears(robot);
-            GlobalUtils.maximizeTheIdeWindow(robot);
-            GlobalUtils.waitUntilAllTheBgTasksFinish(robot);
-            GlobalUtils.closeTheProject(robot);
-        });
+    private static void createDirectoryHierarchy(String location) {
+        Path path = Paths.get(location);
+        try {
+            Files.createDirectories(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Test
-    public void createNewQuarkusProjectWithInvalidCustomEndpointURL() {
-        step("Create new Quarkus project with invalid custom endpoint URL", () -> {
-            QuarkusUtils.tryToCreateNewQuarkusProjectWithInvalidCustomEndpointURL(robot);
-        });
-    }
-
-    @Test
-    public void createAQuarkusProjectAndBuildItUsingGradle() {
-        step("Create a Quarkus project and build it using gradle", () -> {
-            QuarkusUtils.createNewQuarkusProject(robot, BuildUtils.ToolToBuildTheProject.GRADLE, QuarkusUtils.EndpointURLType.DEFAULT);
-            GlobalUtils.waitUntilTheProjectImportIsComplete(robot);
-            GlobalUtils.closeTheTipOfTheDayDialogIfItAppears(robot);
-            GlobalUtils.maximizeTheIdeWindow(robot);
-            GlobalUtils.waitUntilAllTheBgTasksFinish(robot);
-            BuildUtils.buildTheProject(robot, BuildUtils.ToolToBuildTheProject.GRADLE);
-            GlobalUtils.waitUntilAllTheBgTasksFinish(robot);
-            BuildUtils.testIfBuildIsSuccessful(robot);
-            GlobalUtils.closeTheProject(robot);
-        });
+    private static void copyX(String sourceFileLocation, String destFileLocation) {
+        File original = new File(
+                sourceFileLocation);
+        File copied = new File(
+                destFileLocation);
+        try {
+            FileUtils.copyFile(original, copied);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
