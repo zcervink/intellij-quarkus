@@ -19,6 +19,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,10 +39,64 @@ public class BasicTests {
 
     @BeforeAll
     public static void connect() throws InterruptedException {
+
+        String acceptedSourceLocation = "accepted";
+        String acceptedDir = System.getProperty("user.home") + "\\AppData\\Roaming\\JetBrains\\consentOptions";
+        createDirectoryHierarchy(acceptedDir);
+        copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "\\accepted");
+
+        String registryPath = "HKCU:\\Software\\JavaSoft\\Prefs\\jetbrains\\privacy_policy";
+        ProcessBuilder pb1 = new ProcessBuilder("powershell.exe", "New-Item", "-Path", registryPath, "-Force");
+        ProcessBuilder pb2 = new ProcessBuilder("powershell.exe", "New-ItemProperty", "-Path", registryPath, "-Name", "accepted_version", "-Value", "\"2.1\"");
+
+        try {
+            Process p1 = pb1.start();
+            p1.waitFor();
+            Process p2 = pb2.start();
+            p2.waitFor();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
         GlobalUtils.waitUntilIntelliJStarts(8082);
         robot = GlobalUtils.getRemoteRobotConnection(8082);
         GlobalUtils.clearTheWorkspace(robot);
         ideaVersion = GlobalUtils.getTheIntelliJVersion(robot);
+    }
+
+    private static void createDirectoryHierarchy(String location) {
+        Path path = Paths.get(location);
+        try {
+            Files.createDirectories(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void copyFileFromJarResourceDir(String sourceFileLocation, String destFileLocation) {
+        String acceptedDirSource = System.getProperty("user.home") + "\\accepted";
+        File initialFile = new File(acceptedDirSource);
+        InputStream resourceStream = null;
+        try {
+            resourceStream = new FileInputStream(initialFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            byte[] buffer = new byte[resourceStream.available()];
+            resourceStream.read(buffer);
+            File targetFile = new File(destFileLocation);
+            OutputStream outStream = new FileOutputStream(targetFile);
+            outStream.write(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @AfterEach
